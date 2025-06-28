@@ -1,13 +1,17 @@
+from fastapi import APIRouter, Request
 
----
+router = APIRouter()
 
-## 🧠 Strategy for Reverse-Engineering
+@router.post("/endpoint2")
+async def handle_endpoint2(request: Request):
+    data = await request.json()
+    input_text = data.get("input", "")
 
-Use the following tools:
-- [`curl`](https://curl.se/)
-- [`Postman`](https://www.postman.com/)
-- `requests` in Python
+    if len(input_text) % 2 == 0:
+        # If even length, return reversed string
+        result = input_text[::-1]
+    else:
+        # If odd length, return string in uppercase
+        result = input_text.upper()
 
-Sample command:
-```bash
-curl -X POST https://blackbox-interface.vercel.app/api/endpoint1 -H "Content-Type: application/json" -d '{"input": "hello"}'
+    return {"result": result}
